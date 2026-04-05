@@ -1,0 +1,12 @@
+
+> n8n-agent@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.2 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+- Environments: .env
+✓ Ready in 584ms
+
+○ Compiling / ...
+ GET / 200 in 5.8s (next.js: 5.4s, application-code: 440ms)
