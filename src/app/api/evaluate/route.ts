@@ -33,15 +33,20 @@ export async function POST(req: Request) {
     try {
       const { stdout, stderr } = await execAsync(dockerCmd, { timeout: 30000 }); // 30s timeout
       resultOutput = stdout + (stderr ? `\nErrors:\n${stderr}` : '');
-    } catch (execError: any) {
+    } catch (execError: unknown) {
       success = false;
-      resultOutput = execError.stdout + '\n' + execError.stderr + '\n' + execError.message;
+      if (typeof execError === 'object' && execError !== null) {
+        const e = execError as { stdout?: string; stderr?: string; message?: string };
+        resultOutput = (e.stdout || '') + '\n' + (e.stderr || '') + '\n' + (e.message || '');
+      } else {
+        resultOutput = String(execError);
+      }
     }
 
     // Clean up temp file
     try {
       await fs.unlink(flowFilePath);
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Failed to delete tmp flow file", e);
     }
 
@@ -50,8 +55,9 @@ export async function POST(req: Request) {
       output: resultOutput
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Evaluation error:", error);
-    return Response.json({ success: false, error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return Response.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }
