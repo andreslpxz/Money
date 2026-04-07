@@ -52,10 +52,11 @@ export default function Home() {
         ...prev,
         [messageId]: data
       }));
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setEvalResults(prev => ({
         ...prev,
-        [messageId]: { success: false, output: err.message || "Unknown error" }
+        [messageId]: { success: false, output: errorMessage }
       }));
     } finally {
       setEvaluatingMsgId(null);
