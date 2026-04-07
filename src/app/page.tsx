@@ -12,7 +12,7 @@ function extractJsonBlock(text: string) {
 }
 
 export default function Home() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat();
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [evaluatingMsgId, setEvaluatingMsgId] = useState<string | null>(null);
@@ -175,7 +175,20 @@ export default function Home() {
               </div>
             </div>
           )}
+
+          {error && (
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-red-600/50">
+                <XCircle className="w-6 h-6 text-red-500" />
+              </div>
+              <div className="max-w-[80%] rounded-2xl px-5 py-4 bg-red-900/40 text-red-100 border border-red-800">
+                <p className="font-semibold mb-1">Hubo un error de conexión con la IA.</p>
+                <p className="text-sm">{error.message || "Error desconocido"}</p>
+              </div>
+            </div>
+          )}
           <div ref={messagesEndRef} />
+
         </div>
       </main>
 
