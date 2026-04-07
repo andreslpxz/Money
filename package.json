@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node src/app/api/evaluate/__tests__/route.test.js"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.1.9",
