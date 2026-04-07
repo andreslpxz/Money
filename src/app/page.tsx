@@ -4,10 +4,12 @@ import { useChat } from '@ai-sdk/react';
 import { Bot, Send, User, Download, Play, CheckCircle, XCircle } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 
+const JSON_BLOCK_EXTRACT_REGEX = /```json\n([\s\S]*?)\n```/;
+const JSON_BLOCK_REPLACE_REGEX = /```json\n[\s\S]*?\n```/;
+
 // Utility to extract JSON blocks from markdown
 function extractJsonBlock(text: string) {
-  const jsonRegex = /```json\n([\s\S]*?)\n```/;
-  const match = text.match(jsonRegex);
+  const match = text.match(JSON_BLOCK_EXTRACT_REGEX);
   return match ? match[1] : null;
 }
 
@@ -83,7 +85,7 @@ export default function Home() {
               const jsonBlock = !isUser ? extractJsonBlock(m.content) : null;
               // Remove the json block from the displayed text if it exists so we just show the friendly text
               const displayText = jsonBlock
-                ? m.content.replace(/```json\n[\s\S]*?\n```/, '').trim()
+                ? m.content.replace(JSON_BLOCK_REPLACE_REGEX, '').trim()
                 : m.content;
 
               return (
